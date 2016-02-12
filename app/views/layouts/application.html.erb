@@ -17,25 +17,29 @@
     <![endif]-->
   </head>
   <body>
+    <div id="wrap">
+      <%= render "layouts/header" %>
 
-    <%= render "layouts/header" %>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-9">
+            <%= bootstrap_flash %>
+            <%= yield %>
+          </div>
+          <div class="col-lg-3">
+            <%= render "layouts/sidebar" %>
+          </div><!--/span-->
+        </div><!--/row-->
 
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-9">
-          <%= bootstrap_flash %>
-          <%= yield %>
-        </div>
-        <div class="col-lg-3">
-          <%= render "layouts/sidebar" %>
-        </div><!--/span-->
-      </div><!--/row-->
+      </div> <!-- /container -->
 
-      <footer>
-        <p>&copy; Company 2016</p>
-      </footer>
+      <div id="push"></div>
 
-    </div> <!-- /container -->
+    </div>
+
+    <div id="footer">
+      <p>&copy; Company 2016</p>
+    </div>
 
   </body>
 </html>
