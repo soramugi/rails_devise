@@ -10,6 +10,7 @@ set :deploy_to, '/var/www/my_app_name'
 set :pty, true
 
 set :scm, :copy
+
 set :exclude_dir, %w|
 vendor/bundle
 .git/
@@ -23,7 +24,15 @@ public/system/sitemap.xml
 public/system/sitemap.xml.gz
 |
 
-set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/assets}
+set :linked_dirs, %w|
+log
+tmp/pids
+tmp/cache
+tmp/sockets
+vendor/bundle
+public/system
+public/assets
+|
 
 set :bundle_binstubs, -> { shared_path.join('bin') }
 set :keep_releases, 5
@@ -31,7 +40,6 @@ set :keep_releases, 5
 set :unicorn_pid, -> { "#{shared_path}/tmp/pids/unicorn.pid" }
 set :unicorn_config_path, "config/unicorn.rb"
 set :unicorn_rack_env, 'deployment'
-
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
