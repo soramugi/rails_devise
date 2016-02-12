@@ -22,6 +22,12 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 group :development, :test do
   gem 'byebug'
+  gem 'capistrano'
+  gem 'capistrano-rails'
+  gem 'capistrano-rbenv'
+  gem 'capistrano-bundler'
+  gem 'capistrano-scm-copy'
+  gem 'capistrano3-unicorn'
 end
 
 group :development do
@@ -29,3 +35,7 @@ group :development do
   gem 'web-console', '~> 2.0'
 end
 
+group :production do
+  gem 'unicorn'
+  gem 'unicorn-worker-killer'
+end
