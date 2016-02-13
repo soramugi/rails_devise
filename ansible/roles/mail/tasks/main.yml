@@ -1,0 +1,12 @@
+---
+- name: Install required software
+  apt: name={{ item }} state=present
+  with_items:
+    - mailutils
+    - postfix
+
+- template: >
+    src=main.cf
+    dest=/etc/postfix/main.cf
+  notify:
+    - restart postfix

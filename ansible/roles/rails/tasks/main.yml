@@ -50,10 +50,40 @@
     src=nginx.conf
     dest=/etc/nginx/sites-available/rails
 
+- name: Nginx default disable
+  command:
+    rm /etc/nginx/sites-enabled/default
+    removes=/etc/nginx/sites-enabled/default
+  notify:
+    - restart nginx
+
 - name: Nginx conf enabled
   command:
     ln -s /etc/nginx/sites-available/rails /etc/nginx/sites-enabled/rails
     creates=/etc/nginx/sites-enabled/rails
+  notify:
+    - restart nginx
+
+- copy: >
+    src=gzip.conf
+    dest=/etc/nginx/conf.d/gzip.conf
+  notify:
+    - restart nginx
+
+- name : Create Nginx cache dir
+  file:
+    path={{item}}
+    state=directory
+    mode=0777
+  with_items:
+    - "/var/cache"
+    - "/var/cache/nginx"
+    - "/var/cache/nginx/temp"
+    - "/var/cache/nginx/static_file_cache"
+
+- copy: >
+    src=proxy.conf
+    dest=/etc/nginx/conf.d/proxy.conf
   notify:
     - restart nginx
 

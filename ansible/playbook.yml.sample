@@ -24,4 +24,5 @@
     - mysql
     - zabbix-agent
     - rails
+    - mail
 
