@@ -7,18 +7,21 @@
         - 80
         - 10050
     zabbix:
-      server: <zabbix サーバー>
-      host_metadata: <zabbix メタデータ>
+      server: <zabbix server>
+      host_metadata: <zabbix metadata>
     rbenv:
       ruby_version: 2.2.1
     mysql:
-      password: <mysql パスワード>
+      db: <db>
+      user: <user>
+      password: <password>
     rails:
-      url: <rails URL>
+      url: <url>
       dir: '/var/www/my_app_name'
+      secret_key_base: <key>
   roles:
     - server
-    - zabbix-agent
     - mysql
+    - zabbix-agent
     - rails
 

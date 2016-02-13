@@ -34,6 +34,11 @@ public/system
 public/assets
 |
 
+set :linked_files, %w|
+config/database.yml
+config/secrets.yml
+|
+
 set :bundle_binstubs, -> { shared_path.join('bin') }
 set :keep_releases, 5
 

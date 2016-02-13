@@ -2,13 +2,14 @@
 - name: Install required software
   apt: name={{ item }} state=present
   with_items:
-    - mysql-server
+    - mysql-server-5.6
+    - python-mysqldb
 
 - name: Create mysql database
-  mysql_db: name={{ wp_mysql_db }} state=present
+  mysql_db: name={{ mysql.db }} state=present
 
 - name: Create mysql user
   mysql_user:
-    name={{ wp_mysql_user }}
+    name={{ mysql.user }}
     password={{ mysql.password }}
     priv=*.*:ALL

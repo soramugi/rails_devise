@@ -26,6 +26,7 @@
     - libcurl4-openssl-dev
     - libapr1-dev
     - libaprutil1-dev
+    - libffi-dev
 
 - shell: cd /usr/local && test -e rbenv || git clone git://github.com/sstephenson/rbenv.git rbenv
 - shell: cd /usr/local && test -e rbenv/plugins/ruby-build || git clone git://github.com/sstephenson/ruby-build.git rbenv/plugins/ruby-build
@@ -40,7 +41,7 @@
     src=process.conf.erb
     dest=/root/.foreman/templates/upstart/process.conf.erb
 
-- shell: bash -lc "rbenv install {{ rbenv.ruby_version }}"
+- shell: bash -lc "rbenv versions | grep {{ rbenv.ruby_version }} || rbenv install {{ rbenv.ruby_version }}"
 - shell: bash -lc "rbenv global {{ rbenv.ruby_version }}"
 - shell: bash -lc "gem install bundler --no-ri --no-rdoc"
 
@@ -64,7 +65,17 @@
     state=directory
     mode=0777
   with_items:
-    - {{ rails.dir }}/shared
-    - {{ rails.dir }}/shared/log
-    - {{ rails.dir }}/shared/tmp
-    - {{ rails.dir }}/shared/db
+    - "{{ rails.dir }}/shared"
+    - "{{ rails.dir }}/shared/log"
+    - "{{ rails.dir }}/shared/tmp"
+    - "{{ rails.dir }}/shared/config"
+
+- name: Rails db file
+  template:
+    src=database.yml
+    dest="{{ rails.dir }}/shared/config/database.yml"
+
+- name: Rails secrets file
+  template:
+    src=secrets.yml
+    dest="{{ rails.dir }}/shared/config/secrets.yml"
