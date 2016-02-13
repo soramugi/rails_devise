@@ -1,0 +1,14 @@
+---
+- name: Install required software
+  apt: name={{ item }} state=present
+  with_items:
+    - mysql-server
+
+- name: Create mysql database
+  mysql_db: name={{ wp_mysql_db }} state=present
+
+- name: Create mysql user
+  mysql_user:
+    name={{ wp_mysql_user }}
+    password={{ mysql.password }}
+    priv=*.*:ALL

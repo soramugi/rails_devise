@@ -1,0 +1,42 @@
+---
+- copy: >
+    src=zabbix-release_2.2-1+squeeze_all.deb
+    dest=/tmp/zabbix-release_2.2-1+squeeze_all.deb
+
+- apt: deb=/tmp/zabbix-release_2.2-1+squeeze_all.deb
+- apt: update_cache=yes
+
+- name: Install required software zabbix-agent
+  apt: name={{ item }} state=present
+  with_items:
+    - build-essential
+    - curl
+    - libcurl3
+    - libpcre3-dev
+    - libssl-dev
+    - libxml2-dev
+    - libbz2-dev
+    - libgd2-xpm-dev
+    - libmcrypt-dev
+    - zabbix-agent
+
+- name: zabbix agent
+  template:
+    src=zabbix_agentd.conf
+    dest=/etc/zabbix/zabbix_agentd.conf
+  notify:
+    - restart zabbix-agent
+
+- name: mkdir zabbix
+  file: dest={{item}} state=directory
+  with_items:
+    - /var/lib/zabbix
+    - /etc/zabbix/zabbix_agentd.d
+    - /var/log/zabbix/
+
+- name: zabbix mysql user
+  shell:
+    creates=/var/lib/zabbix/.my.cnf
+    cp /etc/mysql/debian.cnf /var/lib/zabbix/.my.cnf && chown root.zabbix /var/lib/zabbix/.my.cnf && chmod 640 /var/lib/zabbix/.my.cnf
+  notify:
+    - restart zabbix-agent

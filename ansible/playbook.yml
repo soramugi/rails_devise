@@ -1,0 +1,24 @@
+- hosts: rails
+  remote_user: root
+  vars:
+    server:
+      allow_ports:
+        - 22
+        - 80
+        - 10050
+    zabbix:
+      server: <zabbix サーバー>
+      host_metadata: <zabbix メタデータ>
+    rbenv:
+      ruby_version: 2.2.1
+    mysql:
+      password: <mysql パスワード>
+    rails:
+      url: <rails URL>
+      dir: '/var/www/my_app_name'
+  roles:
+    - server
+    - zabbix-agent
+    - mysql
+    - rails
+

@@ -1,0 +1,70 @@
+---
+- name: Install required software
+  apt: name={{ item }} state=present
+  with_items:
+    - nginx
+    - build-essential
+    - bison
+    - libreadline6-dev
+    - curl
+    - git-core
+    - zlib1g-dev
+    - libssl-dev
+    - libyaml-dev
+    - libxml2-dev
+    - libxslt1-dev
+    - autoconf
+    - libncurses5-dev
+    - nodejs
+    - npm
+    - redis-server
+    - git
+    - make
+    - curl
+    - xz-utils
+    - libmysqlclient-dev
+    - libcurl4-openssl-dev
+    - libapr1-dev
+    - libaprutil1-dev
+
+- shell: cd /usr/local && test -e rbenv || git clone git://github.com/sstephenson/rbenv.git rbenv
+- shell: cd /usr/local && test -e rbenv/plugins/ruby-build || git clone git://github.com/sstephenson/ruby-build.git rbenv/plugins/ruby-build
+
+- copy: >
+    src=rbenv.sh
+    dest=/etc/profile.d/rbenv.sh
+- file: >
+    path=/root/.foreman/templates/upstart
+    state=directory
+- copy: >
+    src=process.conf.erb
+    dest=/root/.foreman/templates/upstart/process.conf.erb
+
+- shell: bash -lc "rbenv install {{ rbenv.ruby_version }}"
+- shell: bash -lc "rbenv global {{ rbenv.ruby_version }}"
+- shell: bash -lc "gem install bundler --no-ri --no-rdoc"
+
+- name: Nginx set virtual conf
+  template:
+    src=nginx.conf
+    dest=/etc/nginx/sites-available/rails
+
+- name: Nginx conf enabled
+  command:
+    ln -s /etc/nginx/sites-available/rails /etc/nginx/sites-enabled/rails
+    creates=/etc/nginx/sites-enabled/rails
+  notify:
+    - restart nginx
+
+- shell: grep $(hostname) /etc/hosts >/dev/null || echo 127.0.1.1 $(hostname) >> /etc/hosts
+
+- name : Create Rails dir
+  file:
+    path={{item}}
+    state=directory
+    mode=0777
+  with_items:
+    - {{ rails.dir }}/shared
+    - {{ rails.dir }}/shared/log
+    - {{ rails.dir }}/shared/tmp
+    - {{ rails.dir }}/shared/db

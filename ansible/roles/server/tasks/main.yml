@@ -1,0 +1,27 @@
+---
+- name: Update apt cache
+  apt: update_cache=yes cache_valid_time=3600
+
+- apt: upgrade=dist
+
+- name: Install required software
+  apt: name={{ item }} state=present
+  with_items:
+    - sysstat
+    - tree
+    - unattended-upgrades
+
+- copy: >
+    src=20auto-upgrades
+    dest=/etc/apt/apt.conf.d/20auto-upgrades
+
+- copy: >
+    src=sysstat
+    dest=/etc/default/sysstat
+
+- name: Set firewall default policy
+  ufw: state=enabled policy=reject
+
+- name: allow ports
+  ufw: rule=allow port={{ item }}
+  with_items: server.allow_ports
