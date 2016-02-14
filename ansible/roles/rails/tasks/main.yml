@@ -109,3 +109,16 @@
   template:
     src=secrets.yml
     dest="{{ rails.dir }}/shared/config/secrets.yml"
+
+- name: Rails unicorn init
+  template:
+    src=rails_unicorn
+    dest="/etc/init.d/rails_unicorn"
+    mode="u=rwx,g=rx,o=rx"
+
+- shell: update-rc.d rails_unicorn enable
+
+- name: Rails unicorn logrotate
+  template:
+    src=rails_unicorn_logrotate
+    dest="/etc/logrotate.d/rails_unicorn"

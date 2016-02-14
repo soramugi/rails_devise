@@ -1,0 +1,13 @@
+{{ rails.dir }}/shared/log/unicorn.*.log {
+  weekly
+  rotate 4
+  missingok
+  #notifempty
+  copytruncate
+  create 0666 root root
+
+  lastaction
+    pid={{ rails.dir }}/shared/tmp/pids/unicorn.pid
+    test -s $pid && kill -s USR1 "$(cat $pid)"
+  endscript
+}

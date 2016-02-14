@@ -25,3 +25,5 @@
 - name: allow ports
   ufw: rule=allow port={{ item }}
   with_items: server.allow_ports
+
+- hostname: name="{{ rails.url }}"
