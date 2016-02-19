@@ -1,1 +1,4 @@
+{<img src="https://travis-ci.org/soramugi/rails_devise.svg?branch=master" alt="Build Status" />}[https://travis-ci.org/soramugi/rails_devise]
+
+
 会員登録サイト作成時の初期テンプレート
